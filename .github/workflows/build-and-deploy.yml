@@ -90,4 +90,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             IMAGE_TAG="${{ needs.build.outputs.image_tag }}"
-            docker run -d -p 8080:8080 --name bicycle-rack-api fcaceresc/bicycle-rack-api:"$IMAGE_TAG"
+            docker run -d -p 8080:8080 \
+              -e DB_HOST=${{ secrets.DB_HOST }} \
+              -e DB_PORT=${{ secrets.DB_PORT }} \
+              -e DB_NAME=${{ secrets.DB_NAME }} \
+              -e DB_USERNAME=${{ secrets.DB_USERNAME }} \
+              -e DB_PASSWORD=${{ secrets.DB_PASSWORD }} \
+              --name bicycle-rack-api fcaceresc/bicycle-rack-api:"$IMAGE_TAG"

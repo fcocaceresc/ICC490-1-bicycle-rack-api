@@ -24,13 +24,36 @@
     ```bash
     mvn package
     ```
-2. Build the Docker image:
+2. Build the docker image:
     ```bash
-    mvn docker:build
+    docker compose build
     ```
-3. Run the Docker container:
+3. Run the containers:
     ```bash
-    mvn docker:run
+    docker compose up -d
+    ```
+4. When finished, stop the containers:
+    ```bash
+    docker compose down
+    ```
+
+## How to run locally from a clean environment
+
+1. Stop and remove previous containers, networks, and volumes:
+    ```bash
+    docker compose down -v --remove-orphans
+    ```
+2. Clean package the application:
+    ```bash
+    mvn clean package
+    ```
+3. Build the docker image without cache:
+    ```bash
+    docker compose build --no-cache
+    ```
+4. Run the containers:
+    ```bash
+    docker compose up -d
     ```
 
 ## How to deploy to EC2
@@ -40,7 +63,7 @@
     ```bash
     cp .secrets.template .secrets
     ```
-3. Fill in the `.secrets` file:
+3. Fill in the `.secrets` file
 4. Run act:
     ```bash
     act --secret-file .secrets -P ubuntu-latest=catthehacker/ubuntu:full-latest --container-options "--group-add $(stat -c %g /var/run/docker.sock)"
