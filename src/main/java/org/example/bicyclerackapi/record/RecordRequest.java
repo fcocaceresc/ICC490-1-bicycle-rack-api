@@ -1,11 +1,11 @@
 package org.example.bicyclerackapi.record;
 
-public class CreateRecordRequest {
+public class RecordRequest {
     private String studentId;
     private String studentName;
     private String bicycleDescription;
 
-    public CreateRecordRequest(String studentId, String studentName, String bicycleDescription) {
+    public RecordRequest(String studentId, String studentName, String bicycleDescription) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.bicycleDescription = bicycleDescription;

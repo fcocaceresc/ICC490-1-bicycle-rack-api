@@ -14,12 +14,17 @@ public class RecordController {
     }
 
     @PostMapping
-    public Record createRecord(@RequestBody CreateRecordRequest request) {
+    public Record createRecord(@RequestBody RecordRequest request) {
         return recordService.createRecord(request);
     }
 
     @GetMapping
     public List<Record> getAllRecords() {
         return recordService.getAllRecords();
+    }
+
+    @PatchMapping("/{id}")
+    public Record updateRecord(@PathVariable Long id, @RequestBody RecordRequest request) {
+        return recordService.updateRecord(id, request);
     }
 }

@@ -13,7 +13,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Record createRecord(CreateRecordRequest request) {
+    public Record createRecord(RecordRequest request) {
         Record newRecord = new Record(request.getStudentId(), request.getStudentName(), request.getBicycleDescription());
         return recordRepository.save(newRecord);
     }
@@ -21,5 +21,19 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public List<Record> getAllRecords() {
         return recordRepository.findAll();
+    }
+
+    @Override
+    public Record getRecordById(Long id) {
+        return recordRepository.findById(id).orElseThrow(() -> new RecordNotFoundException("Record not found"));
+    }
+
+    @Override
+    public Record updateRecord(Long id, RecordRequest request) {
+        Record existingRecord = getRecordById(id);
+        existingRecord.setStudentId(request.getStudentId());
+        existingRecord.setStudentName(request.getStudentName());
+        existingRecord.setBicycleDescription(request.getBicycleDescription());
+        return recordRepository.save(existingRecord);
     }
 }
