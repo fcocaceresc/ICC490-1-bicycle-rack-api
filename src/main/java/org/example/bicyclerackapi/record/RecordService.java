@@ -3,7 +3,7 @@ package org.example.bicyclerackapi.record;
 import java.util.List;
 
 public interface RecordService {
-    Record createRecord(Record record);
+    Record createRecord(CreateRecordRequest request);
 
     List<Record> getAllRecords();
 }

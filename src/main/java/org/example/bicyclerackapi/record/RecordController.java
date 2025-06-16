@@ -14,8 +14,8 @@ public class RecordController {
     }
 
     @PostMapping
-    public Record createRecord(@RequestBody Record record) {
-        return recordService.createRecord(record);
+    public Record createRecord(@RequestBody CreateRecordRequest request) {
+        return recordService.createRecord(request);
     }
 
     @GetMapping

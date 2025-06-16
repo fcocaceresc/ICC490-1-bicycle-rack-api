@@ -13,8 +13,9 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Record createRecord(Record record) {
-        return recordRepository.save(record);
+    public Record createRecord(CreateRecordRequest request) {
+        Record newRecord = new Record(request.getStudentId(), request.getStudentName(), request.getBicycleDescription());
+        return recordRepository.save(newRecord);
     }
 
     @Override
