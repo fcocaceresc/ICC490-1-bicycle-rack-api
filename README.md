@@ -55,3 +55,16 @@
     ```bash
     docker compose up -d
     ```
+
+## How to deploy to EC2
+
+1. Install [act](https://github.com/nektos/act)
+2. Copy the `.secrets.template` file to `.secrets`:
+    ```bash
+    cp .secrets.template .secrets
+    ```
+3. Fill in the `.secrets` file
+4. Run act:
+    ```bash
+    act --secret-file .secrets -P ubuntu-latest=catthehacker/ubuntu:full-latest --container-options "--group-add $(stat -c %g /var/run/docker.sock)"
+    ```
