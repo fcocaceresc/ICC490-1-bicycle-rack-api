@@ -27,4 +27,9 @@ public class RecordController {
     public Record updateRecord(@PathVariable Long id, @RequestBody RecordRequest request) {
         return recordService.updateRecord(id, request);
     }
+
+    @PatchMapping("/{id}/checkout")
+    public Record checkOutRecord(@PathVariable Long id) {
+        return recordService.checkOutRecord(id);
+    }
 }

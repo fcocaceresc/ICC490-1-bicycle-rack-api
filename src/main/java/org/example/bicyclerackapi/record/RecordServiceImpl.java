@@ -2,6 +2,7 @@ package org.example.bicyclerackapi.record;
 
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
@@ -34,6 +35,13 @@ public class RecordServiceImpl implements RecordService {
         existingRecord.setStudentId(request.getStudentId());
         existingRecord.setStudentName(request.getStudentName());
         existingRecord.setBicycleDescription(request.getBicycleDescription());
+        return recordRepository.save(existingRecord);
+    }
+
+    @Override
+    public Record checkOutRecord(Long id) {
+        Record existingRecord = getRecordById(id);
+        existingRecord.setCheckOut(Instant.now());
         return recordRepository.save(existingRecord);
     }
 }

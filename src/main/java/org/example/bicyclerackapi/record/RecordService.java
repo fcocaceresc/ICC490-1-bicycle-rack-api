@@ -10,4 +10,6 @@ public interface RecordService {
     Record getRecordById(Long id);
 
     Record updateRecord(Long id, RecordRequest request);
+
+    Record checkOutRecord(Long id);
 }
