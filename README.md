@@ -68,3 +68,7 @@
     ```bash
     act --secret-file .secrets -P ubuntu-latest=catthehacker/ubuntu:full-latest --container-options "--group-add $(stat -c %g /var/run/docker.sock)"
     ```
+
+## API Documentation
+
+To access the API documentation, visit http://localhost:8080/swagger-ui/index.html after starting the application.
