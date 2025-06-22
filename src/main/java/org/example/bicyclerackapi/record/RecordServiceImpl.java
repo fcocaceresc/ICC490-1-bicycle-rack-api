@@ -2,6 +2,7 @@ package org.example.bicyclerackapi.record;
 
 import org.example.bicyclerackapi.exception.RecordNotFoundException;
 import org.example.bicyclerackapi.exception.RecordRequest;
+import org.example.bicyclerackapi.exception.StudentHasANotCheckedOutRecordException;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,6 +18,10 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Record createRecord(RecordRequest request) {
+        boolean studentHasCheckedOutRecord = recordRepository.existsByStudentIdAndCheckOutIsNull(request.getStudentId());
+        if (studentHasCheckedOutRecord) {
+            throw new StudentHasANotCheckedOutRecordException("The student has a not checked out record");
+        }
         Record newRecord = new Record(request.getStudentId(), request.getStudentName(), request.getBicycleDescription());
         return recordRepository.save(newRecord);
     }

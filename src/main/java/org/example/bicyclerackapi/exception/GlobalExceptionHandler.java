@@ -20,6 +20,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleStudentHasANotCheckedOutRecordException(StudentHasANotCheckedOutRecordException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(409, exception.getMessage());
+        return ResponseEntity.status(409).body(errorResponse);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleRecordNotFoundException(RecordNotFoundException exception) {
         ErrorResponse errorResponse = new ErrorResponse(404, exception.getMessage());
         return ResponseEntity.status(404).body(errorResponse);
