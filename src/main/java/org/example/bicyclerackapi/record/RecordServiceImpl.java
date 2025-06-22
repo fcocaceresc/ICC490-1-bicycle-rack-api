@@ -1,9 +1,7 @@
 package org.example.bicyclerackapi.record;
 
-import org.example.bicyclerackapi.exception.RecordAlreadyCheckedOutException;
-import org.example.bicyclerackapi.exception.RecordNotFoundException;
-import org.example.bicyclerackapi.exception.RecordRequest;
-import org.example.bicyclerackapi.exception.StudentHasANotCheckedOutRecordException;
+import org.example.bicyclerackapi.exception.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -12,6 +10,8 @@ import java.util.List;
 @Service
 public class RecordServiceImpl implements RecordService {
     private final RecordRepository recordRepository;
+    @Value("${bicycleRack.capacity}")
+    private int bicycleRackCapacity;
 
     public RecordServiceImpl(RecordRepository recordRepository) {
         this.recordRepository = recordRepository;
@@ -19,6 +19,10 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Record createRecord(RecordRequest request) {
+        long currentActiveRecordsCount = recordRepository.countByCheckOutIsNull();
+        if (bicycleRackCapacity <= currentActiveRecordsCount) {
+            throw new BicycleRackIsFullException("The bicycle rack is full");
+        }
         boolean studentHasCheckedOutRecord = recordRepository.existsByStudentIdAndCheckOutIsNull(request.getStudentId());
         if (studentHasCheckedOutRecord) {
             throw new StudentHasANotCheckedOutRecordException("The student has a not checked out record");

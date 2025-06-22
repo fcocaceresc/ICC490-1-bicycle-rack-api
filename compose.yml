@@ -23,6 +23,7 @@ services:
       DB_NAME: ${DB_NAME:-bicycle_rack}
       DB_USERNAME: ${DB_USERNAME:-postgres}
       DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      BICYCLE_RACK_CAPACITY: ${BICYCLE_RACK_CAPACITY:-4}
     ports:
       - "${APP_PORT:-8080}:8080"
 
