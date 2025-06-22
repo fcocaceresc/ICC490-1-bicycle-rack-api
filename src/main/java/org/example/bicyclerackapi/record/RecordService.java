@@ -1,5 +1,7 @@
 package org.example.bicyclerackapi.record;
 
+import org.example.bicyclerackapi.exception.RecordRequest;
+
 import java.util.List;
 
 public interface RecordService {

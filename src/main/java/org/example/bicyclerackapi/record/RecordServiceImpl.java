@@ -1,5 +1,7 @@
 package org.example.bicyclerackapi.record;
 
+import org.example.bicyclerackapi.exception.RecordNotFoundException;
+import org.example.bicyclerackapi.exception.RecordRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;

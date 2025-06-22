@@ -1,4 +1,4 @@
-package org.example.bicyclerackapi.record;
+package org.example.bicyclerackapi.exception;
 
 import java.time.Instant;
 
