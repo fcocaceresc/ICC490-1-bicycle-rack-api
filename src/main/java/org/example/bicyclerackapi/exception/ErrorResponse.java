@@ -2,12 +2,12 @@ package org.example.bicyclerackapi.exception;
 
 import java.time.Instant;
 
-public class RecordErrorResponse {
+public class ErrorResponse {
     private Instant timestamp;
     private int status;
     private String error;
 
-    public RecordErrorResponse(int status, String error) {
+    public ErrorResponse(int status, String error) {
         this.timestamp = Instant.now();
         this.status = status;
         this.error = error;
