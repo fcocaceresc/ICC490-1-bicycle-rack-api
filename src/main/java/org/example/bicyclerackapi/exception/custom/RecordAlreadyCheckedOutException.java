@@ -1,4 +1,4 @@
-package org.example.bicyclerackapi.exception;
+package org.example.bicyclerackapi.exception.custom;
 
 public class RecordAlreadyCheckedOutException extends RuntimeException {
     public RecordAlreadyCheckedOutException(String message) {

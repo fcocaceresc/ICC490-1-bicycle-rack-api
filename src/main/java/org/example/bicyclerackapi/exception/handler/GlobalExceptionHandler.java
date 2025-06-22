@@ -1,5 +1,11 @@
-package org.example.bicyclerackapi.exception;
+package org.example.bicyclerackapi.exception.handler;
 
+import org.example.bicyclerackapi.exception.response.ErrorResponse;
+import org.example.bicyclerackapi.exception.response.ValidationErrorResponse;
+import org.example.bicyclerackapi.exception.custom.BicycleRackIsFullException;
+import org.example.bicyclerackapi.exception.custom.RecordAlreadyCheckedOutException;
+import org.example.bicyclerackapi.exception.custom.RecordNotFoundException;
+import org.example.bicyclerackapi.exception.custom.StudentHasANotCheckedOutRecordException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.CannotCreateTransactionException;

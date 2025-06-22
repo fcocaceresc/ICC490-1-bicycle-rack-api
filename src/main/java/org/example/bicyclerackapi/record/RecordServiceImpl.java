@@ -1,6 +1,9 @@
 package org.example.bicyclerackapi.record;
 
-import org.example.bicyclerackapi.exception.*;
+import org.example.bicyclerackapi.exception.custom.BicycleRackIsFullException;
+import org.example.bicyclerackapi.exception.custom.RecordAlreadyCheckedOutException;
+import org.example.bicyclerackapi.exception.custom.RecordNotFoundException;
+import org.example.bicyclerackapi.exception.custom.StudentHasANotCheckedOutRecordException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

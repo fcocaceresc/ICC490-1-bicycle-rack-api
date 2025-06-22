@@ -1,7 +1,6 @@
 package org.example.bicyclerackapi.record;
 
 import jakarta.validation.Valid;
-import org.example.bicyclerackapi.exception.RecordRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

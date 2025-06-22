@@ -1,4 +1,4 @@
-package org.example.bicyclerackapi.exception;
+package org.example.bicyclerackapi.record;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

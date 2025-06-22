@@ -1,13 +1,14 @@
-package org.example.bicyclerackapi.exception;
+package org.example.bicyclerackapi.exception.response;
 
 import java.time.Instant;
+import java.util.List;
 
-public class ErrorResponse {
+public class ValidationErrorResponse {
     private Instant timestamp;
     private int status;
-    private String error;
+    private List<String> error;
 
-    public ErrorResponse(int status, String error) {
+    public ValidationErrorResponse(int status, List<String> error) {
         this.timestamp = Instant.now();
         this.status = status;
         this.error = error;
@@ -29,11 +30,11 @@ public class ErrorResponse {
         this.status = status;
     }
 
-    public String getError() {
+    public List<String> getError() {
         return error;
     }
 
-    public void setError(String error) {
+    public void setError(List<String> error) {
         this.error = error;
     }
 }
