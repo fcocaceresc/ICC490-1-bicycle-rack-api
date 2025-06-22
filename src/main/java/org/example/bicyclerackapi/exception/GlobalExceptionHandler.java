@@ -1,5 +1,6 @@
 package org.example.bicyclerackapi.exception;
 
+import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -16,6 +17,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleCannotCreateTransactionException(CannotCreateTransactionException exception) {
         ErrorResponse errorResponse = new ErrorResponse(503, "The database is currently unavailable. Unable to process the request.");
+        return ResponseEntity.status(503).body(errorResponse);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleInvalidDataAccessResourceUsageException(InvalidDataAccessResourceUsageException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(503, "The database schema is invalid. Unable to process the request.");
         return ResponseEntity.status(503).body(errorResponse);
     }
 }
