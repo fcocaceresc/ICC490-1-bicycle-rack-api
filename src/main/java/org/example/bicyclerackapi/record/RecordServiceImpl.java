@@ -1,5 +1,6 @@
 package org.example.bicyclerackapi.record;
 
+import org.example.bicyclerackapi.exception.RecordAlreadyCheckedOutException;
 import org.example.bicyclerackapi.exception.RecordNotFoundException;
 import org.example.bicyclerackapi.exception.RecordRequest;
 import org.example.bicyclerackapi.exception.StudentHasANotCheckedOutRecordException;
@@ -48,6 +49,9 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public Record checkOutRecord(Long id) {
         Record existingRecord = getRecordById(id);
+        if (existingRecord.getCheckOut() != null) {
+            throw new RecordAlreadyCheckedOutException("The record is already checked out");
+        }
         existingRecord.setCheckOut(Instant.now());
         return recordRepository.save(existingRecord);
     }

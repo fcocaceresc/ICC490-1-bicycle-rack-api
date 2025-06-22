@@ -32,6 +32,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleRecordAlreadyCheckedOutException(RecordAlreadyCheckedOutException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(409, exception.getMessage());
+        return ResponseEntity.status(409).body(errorResponse);
+    }
+
+    @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleCannotCreateTransactionException(CannotCreateTransactionException exception) {
         ErrorResponse errorResponse = new ErrorResponse(503, "The database is currently unavailable. Unable to process the request.");
         return ResponseEntity.status(503).body(errorResponse);
