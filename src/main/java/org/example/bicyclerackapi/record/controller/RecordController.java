@@ -1,6 +1,9 @@
-package org.example.bicyclerackapi.record;
+package org.example.bicyclerackapi.record.controller;
 
 import jakarta.validation.Valid;
+import org.example.bicyclerackapi.record.model.RecordRequest;
+import org.example.bicyclerackapi.record.service.RecordService;
+import org.example.bicyclerackapi.record.model.Record;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

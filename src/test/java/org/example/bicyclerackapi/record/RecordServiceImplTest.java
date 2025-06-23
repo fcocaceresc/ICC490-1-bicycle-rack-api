@@ -4,6 +4,10 @@ import org.example.bicyclerackapi.exception.custom.BicycleRackIsFullException;
 import org.example.bicyclerackapi.exception.custom.RecordAlreadyCheckedOutException;
 import org.example.bicyclerackapi.exception.custom.RecordNotFoundException;
 import org.example.bicyclerackapi.exception.custom.StudentHasANotCheckedOutRecordException;
+import org.example.bicyclerackapi.record.model.Record;
+import org.example.bicyclerackapi.record.model.RecordRequest;
+import org.example.bicyclerackapi.record.repository.RecordRepository;
+import org.example.bicyclerackapi.record.service.RecordServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,7 +71,7 @@ class RecordServiceImplTest {
 
     @Test
     void checkOutRecordAlreadyCheckedOut() {
-        Record existingRecord = new Record("123456789-25", "amadeus", "oxford");
+        org.example.bicyclerackapi.record.model.Record existingRecord = new org.example.bicyclerackapi.record.model.Record("123456789-25", "amadeus", "oxford");
         existingRecord.setId(1L);
         existingRecord.setCheckOut(Instant.now());
         when(recordRepository.findById(1L)).thenReturn(Optional.of(existingRecord));

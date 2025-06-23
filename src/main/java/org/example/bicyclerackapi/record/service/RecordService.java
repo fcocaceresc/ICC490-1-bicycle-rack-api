@@ -1,4 +1,7 @@
-package org.example.bicyclerackapi.record;
+package org.example.bicyclerackapi.record.service;
+
+import org.example.bicyclerackapi.record.model.RecordRequest;
+import org.example.bicyclerackapi.record.model.Record;
 
 import java.util.List;
 
