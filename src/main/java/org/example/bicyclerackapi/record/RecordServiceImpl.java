@@ -1,5 +1,10 @@
 package org.example.bicyclerackapi.record;
 
+import org.example.bicyclerackapi.exception.custom.BicycleRackIsFullException;
+import org.example.bicyclerackapi.exception.custom.RecordAlreadyCheckedOutException;
+import org.example.bicyclerackapi.exception.custom.RecordNotFoundException;
+import org.example.bicyclerackapi.exception.custom.StudentHasANotCheckedOutRecordException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -8,6 +13,8 @@ import java.util.List;
 @Service
 public class RecordServiceImpl implements RecordService {
     private final RecordRepository recordRepository;
+    @Value("${bicycleRack.capacity}")
+    private int bicycleRackCapacity;
 
     public RecordServiceImpl(RecordRepository recordRepository) {
         this.recordRepository = recordRepository;
@@ -15,6 +22,14 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Record createRecord(RecordRequest request) {
+        long currentActiveRecordsCount = recordRepository.countByCheckOutIsNull();
+        if (bicycleRackCapacity <= currentActiveRecordsCount) {
+            throw new BicycleRackIsFullException("The bicycle rack is full");
+        }
+        boolean studentHasCheckedOutRecord = recordRepository.existsByStudentIdAndCheckOutIsNull(request.getStudentId());
+        if (studentHasCheckedOutRecord) {
+            throw new StudentHasANotCheckedOutRecordException("The student has a not checked out record");
+        }
         Record newRecord = new Record(request.getStudentId(), request.getStudentName(), request.getBicycleDescription());
         return recordRepository.save(newRecord);
     }
@@ -41,6 +56,9 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public Record checkOutRecord(Long id) {
         Record existingRecord = getRecordById(id);
+        if (existingRecord.getCheckOut() != null) {
+            throw new RecordAlreadyCheckedOutException("The record is already checked out");
+        }
         existingRecord.setCheckOut(Instant.now());
         return recordRepository.save(existingRecord);
     }

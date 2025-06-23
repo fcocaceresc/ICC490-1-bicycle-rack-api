@@ -1,5 +1,6 @@
 package org.example.bicyclerackapi.record;
 
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,7 +15,7 @@ public class RecordController {
     }
 
     @PostMapping
-    public Record createRecord(@RequestBody RecordRequest request) {
+    public Record createRecord(@Valid @RequestBody RecordRequest request) {
         return recordService.createRecord(request);
     }
 
@@ -24,7 +25,7 @@ public class RecordController {
     }
 
     @PatchMapping("/{id}")
-    public Record updateRecord(@PathVariable Long id, @RequestBody RecordRequest request) {
+    public Record updateRecord(@PathVariable Long id, @Valid @RequestBody RecordRequest request) {
         return recordService.updateRecord(id, request);
     }
 
