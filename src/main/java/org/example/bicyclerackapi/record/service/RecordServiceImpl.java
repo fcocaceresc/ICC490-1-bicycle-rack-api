@@ -1,12 +1,10 @@
 package org.example.bicyclerackapi.record.service;
 
-import org.example.bicyclerackapi.exception.custom.BicycleRackIsFullException;
-import org.example.bicyclerackapi.exception.custom.RecordAlreadyCheckedOutException;
 import org.example.bicyclerackapi.exception.custom.RecordNotFoundException;
-import org.example.bicyclerackapi.exception.custom.StudentHasANotCheckedOutRecordException;
-import org.example.bicyclerackapi.record.repository.RecordRepository;
-import org.example.bicyclerackapi.record.model.RecordRequest;
 import org.example.bicyclerackapi.record.model.Record;
+import org.example.bicyclerackapi.record.model.RecordRequest;
+import org.example.bicyclerackapi.record.repository.RecordRepository;
+import org.example.bicyclerackapi.record.validator.RecordValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,24 +14,25 @@ import java.util.List;
 @Service
 public class RecordServiceImpl implements RecordService {
     private final RecordRepository recordRepository;
+    private final RecordValidator recordValidator;
     @Value("${bicycleRack.capacity}")
-    private int bicycleRackCapacity;
+    private long bicycleRackCapacity;
 
-    public RecordServiceImpl(RecordRepository recordRepository) {
+    public RecordServiceImpl(RecordRepository recordRepository, RecordValidator recordValidator) {
         this.recordRepository = recordRepository;
+        this.recordValidator = recordValidator;
     }
 
     @Override
     public Record createRecord(RecordRequest request) {
         long currentActiveRecordsCount = recordRepository.countByCheckOutIsNull();
-        if (bicycleRackCapacity <= currentActiveRecordsCount) {
-            throw new BicycleRackIsFullException("The bicycle rack is full");
-        }
+        recordValidator.validateBicycleRackCapacity(bicycleRackCapacity, currentActiveRecordsCount);
+
         boolean studentHasCheckedOutRecord = recordRepository.existsByStudentIdAndCheckOutIsNull(request.getStudentId());
-        if (studentHasCheckedOutRecord) {
-            throw new StudentHasANotCheckedOutRecordException("The student has a not checked out record");
-        }
+        recordValidator.validateStudentHasANotCheckedOutRecord(studentHasCheckedOutRecord);
+
         Record newRecord = new Record(request.getStudentId(), request.getStudentName(), request.getBicycleDescription());
+
         return recordRepository.save(newRecord);
     }
 
@@ -59,9 +58,9 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public Record checkOutRecord(Long id) {
         Record existingRecord = getRecordById(id);
-        if (existingRecord.getCheckOut() != null) {
-            throw new RecordAlreadyCheckedOutException("The record is already checked out");
-        }
+
+        recordValidator.validateRecordIsNotAlreadyCheckedOut(existingRecord);
+
         existingRecord.setCheckOut(Instant.now());
         return recordRepository.save(existingRecord);
     }
