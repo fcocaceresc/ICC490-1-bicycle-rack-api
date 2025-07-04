@@ -8,6 +8,7 @@ import org.example.bicyclerackapi.record.model.Record;
 import org.example.bicyclerackapi.record.model.RecordRequest;
 import org.example.bicyclerackapi.record.repository.RecordRepository;
 import org.example.bicyclerackapi.record.service.RecordServiceImpl;
+import org.example.bicyclerackapi.record.validator.RecordValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,6 +29,8 @@ import static org.mockito.Mockito.*;
 class RecordServiceImplTest {
     @Mock
     private RecordRepository recordRepository;
+    @Mock
+    private RecordValidator recordValidator;
     @InjectMocks
     private RecordServiceImpl recordService;
 
@@ -40,6 +43,7 @@ class RecordServiceImplTest {
     void createRecordBicycleRackIsFull() {
         RecordRequest request = new RecordRequest("123456789-25", "amadeus", "oxford");
         when(recordRepository.countByCheckOutIsNull()).thenReturn(4L);
+        doThrow(new BicycleRackIsFullException("The bicycle rack is full")).when(recordValidator).validateBicycleRackCapacity(4L, 4L);
         Exception exception = assertThrows(BicycleRackIsFullException.class, () -> {
             recordService.createRecord(request);
         });
@@ -51,6 +55,7 @@ class RecordServiceImplTest {
     void createRecordStudentHasNotCheckedOutRecord() {
         RecordRequest request = new RecordRequest("123456789-25", "amadeus", "oxford");
         when(recordRepository.existsByStudentIdAndCheckOutIsNull(request.getStudentId())).thenReturn(true);
+        doThrow(new StudentHasANotCheckedOutRecordException("The student has a not checked out record")).when(recordValidator).validateStudentHasANotCheckedOutRecord(true);
         Exception exception = assertThrows(StudentHasANotCheckedOutRecordException.class, () -> {
             recordService.createRecord(request);
         });
@@ -75,6 +80,7 @@ class RecordServiceImplTest {
         existingRecord.setId(1L);
         existingRecord.setCheckOut(Instant.now());
         when(recordRepository.findById(1L)).thenReturn(Optional.of(existingRecord));
+        doThrow(new RecordAlreadyCheckedOutException("The record is already checked out")).when(recordValidator).validateRecordIsNotAlreadyCheckedOut(existingRecord);
         Exception exception = assertThrows(RecordAlreadyCheckedOutException.class, () -> {
             recordService.checkOutRecord(1L);
         });
