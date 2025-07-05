@@ -1,14 +1,13 @@
 package org.example.bicyclerackapi.record.service;
 
-import org.example.bicyclerackapi.record.model.RecordRequest;
 import org.example.bicyclerackapi.record.model.Record;
-
-import java.util.List;
+import org.example.bicyclerackapi.record.model.RecordPageResponse;
+import org.example.bicyclerackapi.record.model.RecordRequest;
 
 public interface RecordService {
     Record createRecord(RecordRequest request);
 
-    List<Record> getAllRecords();
+    RecordPageResponse getRecords(String pageToken, int maxPageSize);
 
     Record getRecordById(Long id);
 

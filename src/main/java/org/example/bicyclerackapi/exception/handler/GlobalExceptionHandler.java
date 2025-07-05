@@ -1,11 +1,8 @@
 package org.example.bicyclerackapi.exception.handler;
 
+import org.example.bicyclerackapi.exception.custom.*;
 import org.example.bicyclerackapi.exception.response.ErrorResponse;
 import org.example.bicyclerackapi.exception.response.ValidationErrorResponse;
-import org.example.bicyclerackapi.exception.custom.BicycleRackIsFullException;
-import org.example.bicyclerackapi.exception.custom.RecordAlreadyCheckedOutException;
-import org.example.bicyclerackapi.exception.custom.RecordNotFoundException;
-import org.example.bicyclerackapi.exception.custom.StudentHasANotCheckedOutRecordException;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.CannotCreateTransactionException;
@@ -66,5 +63,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleInvalidDataAccessResourceUsageException(InvalidDataAccessResourceUsageException exception) {
         ErrorResponse errorResponse = new ErrorResponse(503, "The database schema is invalid. Unable to process the request.");
         return ResponseEntity.status(503).body(errorResponse);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleInvalidPageTokenException(InvalidPageTokenException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(400, exception.getMessage());
+        return ResponseEntity.status(400).body(errorResponse);
     }
 }

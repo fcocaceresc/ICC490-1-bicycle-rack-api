@@ -1,12 +1,11 @@
 package org.example.bicyclerackapi.record.controller;
 
 import jakarta.validation.Valid;
+import org.example.bicyclerackapi.record.model.Record;
+import org.example.bicyclerackapi.record.model.RecordPageResponse;
 import org.example.bicyclerackapi.record.model.RecordRequest;
 import org.example.bicyclerackapi.record.service.RecordService;
-import org.example.bicyclerackapi.record.model.Record;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/records")
@@ -23,8 +22,8 @@ public class RecordController {
     }
 
     @GetMapping
-    public List<Record> getAllRecords() {
-        return recordService.getAllRecords();
+    public RecordPageResponse getRecords(@RequestParam(required = false) String pageToken, @RequestParam(defaultValue = "10") int maxPageSize) {
+        return recordService.getRecords(pageToken, maxPageSize);
     }
 
     @PatchMapping("/{id}")

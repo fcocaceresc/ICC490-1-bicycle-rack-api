@@ -1,11 +1,18 @@
 package org.example.bicyclerackapi.record.service;
 
+import org.example.bicyclerackapi.exception.custom.InvalidPageTokenException;
 import org.example.bicyclerackapi.exception.custom.RecordNotFoundException;
 import org.example.bicyclerackapi.record.model.Record;
+import org.example.bicyclerackapi.record.model.RecordPageResponse;
 import org.example.bicyclerackapi.record.model.RecordRequest;
 import org.example.bicyclerackapi.record.repository.RecordRepository;
+import org.example.bicyclerackapi.record.utils.PageTokenUtils;
 import org.example.bicyclerackapi.record.validator.RecordValidator;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -37,8 +44,20 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public List<Record> getAllRecords() {
-        return recordRepository.findAll();
+    public RecordPageResponse getRecords(String pageToken, int maxPageSize) {
+        int pageNumber = PageTokenUtils.getPageNumberFromToken(pageToken);
+        Pageable pageable = PageRequest.of(pageNumber, maxPageSize, Sort.by("id").ascending());
+        Slice<Record> recordSlice = recordRepository.findAll(pageable);
+        validatePageExists(pageNumber, recordSlice);
+        List<Record> records = recordSlice.getContent();
+        String nextPageToken = PageTokenUtils.generateNextPageToken(recordSlice);
+        return new RecordPageResponse(records, nextPageToken);
+    }
+
+    public void validatePageExists(int pageNumber, Slice<Record> recordSlice) {
+        if (pageNumber > 0 && recordSlice.getContent().isEmpty()) {
+            throw new InvalidPageTokenException("Invalid page token.");
+        }
     }
 
     @Override
