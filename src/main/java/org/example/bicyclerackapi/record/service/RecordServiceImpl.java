@@ -7,12 +7,14 @@ import org.example.bicyclerackapi.record.model.RecordPageResponse;
 import org.example.bicyclerackapi.record.model.RecordRequest;
 import org.example.bicyclerackapi.record.repository.RecordRepository;
 import org.example.bicyclerackapi.record.utils.PageTokenUtils;
+import org.example.bicyclerackapi.record.utils.SpecificationBuilder;
 import org.example.bicyclerackapi.record.validator.RecordValidator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -22,12 +24,14 @@ import java.util.List;
 public class RecordServiceImpl implements RecordService {
     private final RecordRepository recordRepository;
     private final RecordValidator recordValidator;
+    private final SpecificationBuilder filterBuilder;
     @Value("${bicycleRack.capacity}")
     private long bicycleRackCapacity;
 
-    public RecordServiceImpl(RecordRepository recordRepository, RecordValidator recordValidator) {
+    public RecordServiceImpl(RecordRepository recordRepository, RecordValidator recordValidator, SpecificationBuilder filterBuilder) {
         this.recordRepository = recordRepository;
         this.recordValidator = recordValidator;
+        this.filterBuilder = filterBuilder;
     }
 
     @Override
@@ -44,10 +48,14 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public RecordPageResponse getRecords(String pageToken, int maxPageSize) {
+    public RecordPageResponse getRecords(String pageToken, int maxPageSize, String filter) {
         int pageNumber = PageTokenUtils.getPageNumberFromToken(pageToken);
         Pageable pageable = PageRequest.of(pageNumber, maxPageSize, Sort.by("id").ascending());
-        Slice<Record> recordSlice = recordRepository.findAll(pageable);
+
+        Specification<Record> specification = filterBuilder.buildSpecification(filter);
+
+        Slice<Record> recordSlice = specification != null ? recordRepository.findAll(specification, pageable) : recordRepository.findAll(pageable);
+
         validatePageExists(pageNumber, recordSlice);
         List<Record> records = recordSlice.getContent();
         String nextPageToken = PageTokenUtils.generateNextPageToken(recordSlice);

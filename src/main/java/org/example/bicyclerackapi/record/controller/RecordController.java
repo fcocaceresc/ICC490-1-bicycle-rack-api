@@ -22,8 +22,8 @@ public class RecordController {
     }
 
     @GetMapping
-    public RecordPageResponse getRecords(@RequestParam(required = false) String pageToken, @RequestParam(defaultValue = "10") int maxPageSize) {
-        return recordService.getRecords(pageToken, maxPageSize);
+    public RecordPageResponse getRecords(@RequestParam(required = false) String pageToken, @RequestParam(defaultValue = "10") int maxPageSize, @RequestParam(required = false) String filter) {
+        return recordService.getRecords(pageToken, maxPageSize, filter);
     }
 
     @PatchMapping("/{id}")

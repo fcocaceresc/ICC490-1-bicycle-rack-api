@@ -70,4 +70,10 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = new ErrorResponse(400, exception.getMessage());
         return ResponseEntity.status(400).body(errorResponse);
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleInvalidFilterException(InvalidFilterException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(400, exception.getMessage());
+        return ResponseEntity.status(400).body(errorResponse);
+    }
 }
