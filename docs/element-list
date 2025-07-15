@@ -1,0 +1,14 @@
+org.example.bicyclerackapi
+org.example.bicyclerackapi.exception.custom
+org.example.bicyclerackapi.exception.handler
+org.example.bicyclerackapi.exception.response
+org.example.bicyclerackapi.rack.config
+org.example.bicyclerackapi.rack.model
+org.example.bicyclerackapi.rack.repository
+org.example.bicyclerackapi.rack.service
+org.example.bicyclerackapi.record.controller
+org.example.bicyclerackapi.record.model
+org.example.bicyclerackapi.record.repository
+org.example.bicyclerackapi.record.service
+org.example.bicyclerackapi.record.utils
+org.example.bicyclerackapi.status
