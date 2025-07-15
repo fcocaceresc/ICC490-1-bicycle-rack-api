@@ -1,6 +1,7 @@
 package org.example.bicyclerackapi.record.model;
 
 import jakarta.persistence.*;
+import org.example.bicyclerackapi.rack.model.Rack;
 
 import java.time.Instant;
 
@@ -19,14 +20,22 @@ public class Record {
     @Column(nullable = false)
     private Instant checkIn;
     private Instant checkOut;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "rack_id", nullable = false)
+    private Rack rack;
+    @Column(nullable = false)
+    private Long hook;
 
-    public Record() {}
+    public Record() {
+    }
 
-    public Record(String studentId, String studentName, String bicycleDescription) {
+    public Record(String studentId, String studentName, String bicycleDescription, Rack rack, Long hook) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.bicycleDescription = bicycleDescription;
         this.checkIn = Instant.now();
+        this.rack = rack;
+        this.hook = hook;
     }
 
     public Long getId() {
@@ -75,5 +84,21 @@ public class Record {
 
     public void setCheckOut(Instant checkOut) {
         this.checkOut = checkOut;
+    }
+
+    public Rack getRack() {
+        return rack;
+    }
+
+    public void setRack(Rack rack) {
+        this.rack = rack;
+    }
+
+    public Long getHook() {
+        return hook;
+    }
+
+    public void setHook(Long hook) {
+        this.hook = hook;
     }
 }

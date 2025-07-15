@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 public interface RecordRepository extends JpaRepository<Record, Long>, JpaSpecificationExecutor<Record> {
     boolean existsByStudentIdAndCheckOutIsNull(String studentId);
 
-    long countByCheckOutIsNull();
+    boolean existsByRackIdAndHookAndCheckOutIsNull(Long rackId, Long hook);
 }

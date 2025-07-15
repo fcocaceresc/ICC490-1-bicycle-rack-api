@@ -1,6 +1,7 @@
 package org.example.bicyclerackapi.record.model;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public class RecordRequest {
@@ -13,11 +14,17 @@ public class RecordRequest {
     @NotBlank(message = "bicycleDescription is a required field and can't be null or empty")
     @Size(max = 255, message = "bicycleDescription must be less than or equal to 255 characters")
     private String bicycleDescription;
+    @NotNull(message = "rackId is a required field and can't be null")
+    private Long rackId;
+    @NotNull(message = "hook is a required field and can't be null")
+    private Long hook;
 
-    public RecordRequest(String studentId, String studentName, String bicycleDescription) {
+    public RecordRequest(String studentId, String studentName, String bicycleDescription, Long rackId, Long hook) {
         this.studentId = studentId;
         this.studentName = studentName;
         this.bicycleDescription = bicycleDescription;
+        this.rackId = rackId;
+        this.hook = hook;
     }
 
     public String getStudentId() {
@@ -42,5 +49,21 @@ public class RecordRequest {
 
     public void setBicycleDescription(String bicycleDescription) {
         this.bicycleDescription = bicycleDescription;
+    }
+
+    public Long getRackId() {
+        return rackId;
+    }
+
+    public void setRackId(Long rackId) {
+        this.rackId = rackId;
+    }
+
+    public Long getHook() {
+        return hook;
+    }
+
+    public void setHook(Long hook) {
+        this.hook = hook;
     }
 }

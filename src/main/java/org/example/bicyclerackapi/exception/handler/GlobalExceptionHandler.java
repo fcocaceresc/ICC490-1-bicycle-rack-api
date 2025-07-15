@@ -5,6 +5,7 @@ import org.example.bicyclerackapi.exception.response.ErrorResponse;
 import org.example.bicyclerackapi.exception.response.ValidationErrorResponse;
 import org.springframework.dao.InvalidDataAccessResourceUsageException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.transaction.CannotCreateTransactionException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,12 +22,6 @@ public class GlobalExceptionHandler {
         List<String> errorMessages = exception.getBindingResult().getFieldErrors().stream().map(FieldError::getDefaultMessage).toList();
         ValidationErrorResponse errorResponse = new ValidationErrorResponse(400, errorMessages);
         return ResponseEntity.status(400).body(errorResponse);
-    }
-
-    @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleBicycleRackIsFullException(BicycleRackIsFullException exception) {
-        ErrorResponse errorResponse = new ErrorResponse(409, exception.getMessage());
-        return ResponseEntity.status(409).body(errorResponse);
     }
 
     @ExceptionHandler
@@ -74,6 +69,30 @@ public class GlobalExceptionHandler {
     @ExceptionHandler
     public ResponseEntity<ErrorResponse> handleInvalidFilterException(InvalidFilterException exception) {
         ErrorResponse errorResponse = new ErrorResponse(400, exception.getMessage());
+        return ResponseEntity.status(400).body(errorResponse);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleRackNotFoundException(RackNotFoundException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(404, exception.getMessage());
+        return ResponseEntity.status(404).body(errorResponse);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleInvalidHookException(InvalidHookException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(400, exception.getMessage());
+        return ResponseEntity.status(400).body(errorResponse);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleHookIsOccupiedException(HookIsOccupiedException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(409, exception.getMessage());
+        return ResponseEntity.status(409).body(errorResponse);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException exception) {
+        ErrorResponse errorResponse = new ErrorResponse(400, "Invalid request body.");
         return ResponseEntity.status(400).body(errorResponse);
     }
 }
