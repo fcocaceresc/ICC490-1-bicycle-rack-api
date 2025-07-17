@@ -1,9 +1,12 @@
 package org.example.bicyclerackapi.record.validator;
 
-import org.example.bicyclerackapi.exception.custom.BicycleRackIsFullException;
+import org.example.bicyclerackapi.exception.custom.HookIsOccupiedException;
+import org.example.bicyclerackapi.exception.custom.InvalidHookException;
 import org.example.bicyclerackapi.exception.custom.RecordAlreadyCheckedOutException;
 import org.example.bicyclerackapi.exception.custom.StudentHasANotCheckedOutRecordException;
+import org.example.bicyclerackapi.rack.model.Rack;
 import org.example.bicyclerackapi.record.model.Record;
+import org.example.bicyclerackapi.record.utils.RecordValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,18 +23,35 @@ class RecordValidatorTest {
     }
 
     @Test
-    void validateBicycleRackCapacity_BicycleRackIsNotFull() {
+    void validateHookExists_HookExists() {
+        Rack rack = new Rack(1L, 2L, 2L, 4L);
         assertDoesNotThrow(() -> {
-            recordValidator.validateBicycleRackCapacity(10, 5);
+            recordValidator.validateHookExists(rack, 1L);
         });
     }
 
     @Test
-    void validateBicycleRackCapacity_BicycleRackIsFull() {
-        Exception exception = assertThrows(BicycleRackIsFullException.class, () -> {
-            recordValidator.validateBicycleRackCapacity(10, 10);
+    void validateHookExists_HookDoesNotExist() {
+        Rack rack = new Rack(1L, 2L, 2L, 4L);
+        Exception exception = assertThrows(InvalidHookException.class, () -> {
+            recordValidator.validateHookExists(rack, 5L);
         });
-        assertEquals("The bicycle rack is full", exception.getMessage());
+        assertEquals("The hook does not exist in the rack", exception.getMessage());
+    }
+
+    @Test
+    void validateHookIsNotOccupied_HookIsNotOccupied() {
+        assertDoesNotThrow(() -> {
+            recordValidator.validateHookIsNotOccupied(false);
+        });
+    }
+
+    @Test
+    void validateHookIsNotOccupied_HookIsOccupied() {
+        Exception exception = assertThrows(HookIsOccupiedException.class, () -> {
+            recordValidator.validateHookIsNotOccupied(true);
+        });
+        assertEquals("The hook is already occupied", exception.getMessage());
     }
 
     @Test
@@ -51,7 +71,8 @@ class RecordValidatorTest {
 
     @Test
     void validateRecordIsNotAlreadyCheckedOut_RecordIsNotCheckedOut() {
-        Record record = new Record("123456789-25", "amadeus", "oxford");
+        Rack rack = new Rack(1L, 2L, 2L, 4L);
+        Record record = new Record("123456789-25", "amadeus", "oxford", rack, 1L);
         record.setCheckOut(null);
         assertDoesNotThrow(() -> {
             recordValidator.validateRecordIsNotAlreadyCheckedOut(record);
@@ -60,7 +81,8 @@ class RecordValidatorTest {
 
     @Test
     void validateRecordIsNotAlreadyCheckedOut_RecordIsAlreadyCheckedOut() {
-        Record record = new Record("123456789-25", "amadeus", "oxford");
+        Rack rack = new Rack(1L, 2L, 2L, 4L);
+        Record record = new Record("123456789-25", "amadeus", "oxford", rack, 1L);
         record.setCheckOut(Instant.now());
         Exception exception = assertThrows(RecordAlreadyCheckedOutException.class, () -> {
             recordValidator.validateRecordIsNotAlreadyCheckedOut(record);
